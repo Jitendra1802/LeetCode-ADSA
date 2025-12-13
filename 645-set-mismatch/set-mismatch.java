@@ -1,28 +1,20 @@
 class Solution {
     public int[] findErrorNums(int[] nums) {
         int n = nums.length;
-        
-        //array sum
-        int sum = 0;
-        for (int num : nums){
-            sum += num;
+        int[] freq = new int[n + 1]; 
+        for (int x : nums) {
+            freq[x]++;
         }
-        
-        // duplicate
-        int duplicate = -1;
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                if (nums[i] == nums[j]) {
-                    duplicate = nums[i];
-                    break;
-                }
-            }
+
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        for (int i = 1; i <= n; i++) {
+            if (freq[i] == 2) ans.add(i);  
         }
-        
-        //Find missing
-        int actSum = n * (n + 1) / 2;
-        int miss = actSum - (sum - duplicate);
-        
-        return new int[]{duplicate, miss};
+        for (int i = 1; i <= n; i++) {
+            if (freq[i] == 0) ans.add(i); 
+        }
+
+        return new int[]{ ans.get(0), ans.get(1) };
     }
 }
