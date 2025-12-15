@@ -1,12 +1,17 @@
 class Solution {
-    static public long getDescentPeriods(int[] prices) {
-        long sum=0, des=0;
-        int prev=-1;
-        for (int x : prices){
-            des=(x+1==prev?des:0)+1;
-            sum+=des;
-            prev=x;
+    public long getDescentPeriods(int[] prices) {
+        long total = 1;
+        int current_length = 1;
+
+        for (int i = 1; i < prices.length; i++) {
+            if (prices[i] == prices[i - 1] - 1) {
+                current_length++;
+            } else {
+                current_length = 1;
+            }
+            total += current_length;
         }
-        return sum;
+
+        return total;
     }
 }
