@@ -1,27 +1,28 @@
 class Solution {
     public int maxProfit(int[] prices) {
-        int n=prices.length;
-        int[][] dp=new int[n][2];
-        for(int i=0;i<n;i++){
-            for(int buy=0;buy<2;buy++){
-                dp[i][buy]=-1;
-            }
-        }
-        return rec(prices,0,1,dp);
+        HashMap<String, Integer> hm= new HashMap<>();
+        return maxProfit(0,0,prices,hm);
     }
-    public int rec(int[] prices, int i, int buy, int[][] dp){
+    private int maxProfit(int i, int buyORsell, int[] prices, HashMap<String, Integer> hm){
         if(i>=prices.length){
             return 0;
         }
-        if(dp[i][buy]!=-1){
-            return dp[i][buy];
+        String key=i+"code"+buyORsell;
+        if(hm.containsKey(key)){
+            return hm.get(key);
         }
-        if(buy==1){
-            dp[i][buy]=Math.max(-prices[i]+rec(prices,i+1,0,dp), rec(prices,i+1,1,dp));
+
+        int x=0;
+        if(buyORsell ==0){
+            int buy=maxProfit(i+1,1,prices,hm)-prices[i];
+            int noBuy=maxProfit(i+1,0,prices,hm);
+            x=Math.max(buy, noBuy);
+        }else{
+            int sell=maxProfit(i+2,0,prices,hm)+prices[i];
+            int noSell=maxProfit(i+1,1,prices,hm);
+            x=Math.max(sell,noSell);
         }
-        else{
-            dp[i][buy]= Math.max(prices[i]+rec(prices,i+2,1,dp),rec(prices,i+1,0,dp));
-        }
-        return dp[i][buy];
+        hm.put(key,x);
+        return x;
     }
 }
